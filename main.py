@@ -28,6 +28,28 @@ def create_cell_alive(board):
             board[y][x]=random.randint(0, 1)   
     return board
 
+def print_board(board):
+    # Inicializa colorama para permitir el uso de secuencias de escape ANSI en Windows
+    colorama.init(autoreset=True)
+    
+    image = []
+
+        # Genera una nueva imagen con colores aleatorios
+    for y in range(len(board)):
+        row = []
+        for x in range(len(board[0])):
+            num =  board[y][x]
+            row.append(f"{ alive if num.__eq__(1) else dead }")
+        image.append(row)
+
+    # Imprime la imagen en la consola
+    clear_console()
+    for row in image:
+        print("".join(row))
+    
+    
+    return 0
+    
 def print_dynamic_image(width, height):
     # Inicializa colorama para permitir el uso de secuencias de escape ANSI en Windows
     colorama.init(autoreset=True)
@@ -55,21 +77,26 @@ def print_dynamic_image(width, height):
 
 if __name__ == "__main__":
     # Tamaño de la imagen (ancho x alto)
-    image_width, image_height = 10, 10
+    image_width, image_height = 30, 30
 
     # Muestra una imagen dinámica en la consola
     # print_dynamic_image(image_width, image_height)
     
     # Crear tablero con celulas muertas 
     board = create_board(image_width, image_height)
-    for x in board:
-        print(x)
+    # for x in board:
+    #     print(x)
     
-    print()
-    
+    # print()
+    # crear celular vivas
     board_alive = create_cell_alive(board)
-    for x in board_alive:
-        print(x)
+    # for x in board_alive:
+    #     print(x)
+        
+    # print() 
+    
+    print_board(board_alive)
+    
     
     
     
