@@ -2,6 +2,8 @@ import colorama
 import time
 import random
 
+dead = f"\033[48;2;0;0;0m  \033[0m"
+alive = f"\033[48;2;255;255;255m  \033[0m"
 def clear_console():
     # Limpia la consola dependiendo del sistema operativo
     import os
@@ -9,10 +11,23 @@ def clear_console():
         os.system("cls")
     else:  # UNIX
         os.system("clear")
+        
+def create_board(width, height):
+    # Crea un tablero con celdas muertas
+    return [[0 for _ in range(width)] for _ in range(height)]
+
+
+def create_board(width, height):
+    # Crea un tablero con celdas muertas
+    return [[0 for _ in range(width)] for _ in range(height)]
+
+
 
 def print_dynamic_image(width, height):
     # Inicializa colorama para permitir el uso de secuencias de escape ANSI en Windows
     colorama.init(autoreset=True)
+    
+    
 
     while True:
         image = []
@@ -21,11 +36,8 @@ def print_dynamic_image(width, height):
         for y in range(height):
             row = []
             for x in range(width):
-                r, g, b = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-                pixel_color = f"\033[48;2;{r};{g};{b}m  \033[0m"
-                r, g, b = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-                pixel_color = f"\033[48;2;{r};{g};{b}m  \033[0m"
-                row.append(pixel_color)
+                num = random.randint(0, 1)  
+                row.append(f"{ alive if num.__eq__(1) else dead }")
             image.append(row)
 
         # Imprime la imagen en la consola
@@ -34,11 +46,24 @@ def print_dynamic_image(width, height):
             print("".join(row))
 
         # Espera un corto período de tiempo antes de actualizar la imagen
-        time.sleep(0.5)
+        time.sleep(1)
 
 if __name__ == "__main__":
     # Tamaño de la imagen (ancho x alto)
-    image_width, image_height = 50, 20
+    image_width, image_height = 10, 10
 
     # Muestra una imagen dinámica en la consola
-    print_dynamic_image(image_width, image_height)
+    # print_dynamic_image(image_width, image_height)
+    
+    # Crear tablero con celulas muertas 
+    board = create_board(image_width, image_height)
+    for x in board:
+        print(x)
+    
+    
+    
+    
+    
+    
+    
+    
