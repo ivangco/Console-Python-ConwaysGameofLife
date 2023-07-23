@@ -23,6 +23,8 @@ def print_dynamic_image(width, height):
             for x in range(width):
                 r, g, b = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
                 pixel_color = f"\033[48;2;{r};{g};{b}m  \033[0m"
+                r, g, b = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+                pixel_color = f"\033[48;2;{r};{g};{b}m  \033[0m"
                 row.append(pixel_color)
             image.append(row)
 
