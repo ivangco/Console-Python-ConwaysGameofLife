@@ -21,7 +21,12 @@ def create_board(width, height):
     # Crea un tablero con celdas muertas
     return [[0 for _ in range(width)] for _ in range(height)]
 
-
+def create_cell_alive(board):
+    # Crea un tablero con celdas muertas
+    for y in range(len(board)):
+        for x in range(len(board[0])):
+            board[y][x]=random.randint(0, 1)   
+    return board
 
 def print_dynamic_image(width, height):
     # Inicializa colorama para permitir el uso de secuencias de escape ANSI en Windows
@@ -58,6 +63,12 @@ if __name__ == "__main__":
     # Crear tablero con celulas muertas 
     board = create_board(image_width, image_height)
     for x in board:
+        print(x)
+    
+    print()
+    
+    board_alive = create_cell_alive(board)
+    for x in board_alive:
         print(x)
     
     
