@@ -29,19 +29,33 @@ def create_cell_alive(board):
 
 
 def evolve(board):
+    # Calcula la siguiente generación del juego de la vida
     new_board = create_board(len(board[0]), len(board))
 
     for y in range(len(board)):
         for x in range(len(board[0])):
-            new_board[y][x] = destiny(board, y, x) if 1 or 0 else board[y][x]
-            # print(destiny(board,y,x))
+            neighbors = count_neighbors(board, x, y)
+            current_cell = board[y][x]
+
+            if current_cell:
+                # Célula viva
+                if neighbors < 2 or neighbors > 3:
+                    # Muere debido a la soledad o la superpoblación
+                    new_board[y][x] = 0
+                else:
+                    # Sobrevive
+                    new_board[y][x] = 1
+            else:
+                # Célula muerta
+                if neighbors == 3:
+                    # Nacimiento
+                    new_board[y][x] = 1
+
     return new_board
 
 
-def destiny(board, y, x):
-    current_cell = board[y][x]
+def destiny(board, x, y):
 
-    destinyty = 1
     vivos = [
         get_top_left(board, y, x),
         get_left_center(board, y, x),
@@ -51,34 +65,36 @@ def destiny(board, y, x):
         get_top_right(board, y, x),
         get_center_right(board, y, x),
         get_lower_right(board, y, x)
-    ].count(1)
-    # print(vivos, muertos)
+    ]
 
-    if current_cell == 1:
-        # Cualquier célula viva con dos o tres vecinos vivos sobrevive.
-        if vivos in (2, 3):
-            destinyty = 1
-        else:
-            destinyty = 0
-
-    else:
-        # Cualquier célula muerta con tres vecinos vivos se convierte en una célula viva.
-        if vivos == 3:
-            destinyty = 1
-        else:
-            # Todas las demás células vivas mueren en la próxima generación. Del mismo modo,
-            # todas las demás células muertas permanecen muertas.
-            destinyty = False
-
-    return destinyty
+    return vivos.count(1)
 
 
+def count_neighbors(board, x, y):
+    # Cuenta el número de células vecinas vivas de una celda dada
+    width, height = len(board[0]), len(board)
+    count = 0
+
+    # recorre la celulas vivas de arriba, abajo , izquierda  y diagonales
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            if dx == 0 and dy == 0:
+                continue
+
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < width and 0 <= ny < height and board[ny][nx] == 1:
+                count += 1
+
+    return count
 # [*,-,-]
 # [-,-,-]
 # [-,-,-]
+
+
 def get_top_left(board, y, x):
     try:
-        return board[y-1][x]
+        return board[y-1][x+0]
     except IndexError:
         return 0
 
@@ -89,7 +105,7 @@ def get_top_left(board, y, x):
 
 def get_left_center(board, y, x):
     try:
-        return board[y][x-1]
+        return board[y+0][x-1]
     except IndexError:
         return 0
 
@@ -110,7 +126,7 @@ def get_bottom_left(board, y, x):
 
 def get_top_center(board, y, x):
     try:
-        return board[y-1][x]
+        return board[y-1][x+0]
     except IndexError:
         return 0
 
@@ -121,7 +137,7 @@ def get_top_center(board, y, x):
 
 def get_center_center(board, y, x):
     try:
-        return board[y][x]
+        return board[y+0][x+0]
     except IndexError:
         return 0
 
@@ -132,7 +148,7 @@ def get_center_center(board, y, x):
 
 def get_bottom_center(board, y, x):
     try:
-        return board[y+1][x]
+        return board[y+1][x+0]
     except IndexError:
         return 0
 # [-,-,*]
@@ -152,7 +168,7 @@ def get_top_right(board, y, x):
 
 def get_center_right(board, y, x):
     try:
-        return board[y][x+1]
+        return board[y+0][x+1]
     except IndexError:
         return 0
 # [-,-,-]
@@ -208,7 +224,7 @@ if __name__ == "__main__":
     # Inicializa colorama para permitir el uso de secuencias de escape ANSI en Windows
     colorama.init(autoreset=True)
     # Tamaño de la imagen (ancho x alto)
-    image_width, image_height = 40, 20
+    image_width, image_height = 30, 40
 
     # Crear tablero con celulas muertas
     board = create_board(image_width, image_height)
@@ -226,5 +242,5 @@ if __name__ == "__main__":
         print_board(board_alive, image)
         # print_board(current_board,image)
 
-        # time.sleep(1)
+        time.sleep(0.5)
         board_alive = evolve(board_alive)
